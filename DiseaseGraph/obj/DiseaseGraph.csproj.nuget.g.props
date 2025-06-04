@@ -1,0 +1,502 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <RestoreSuccess Condition=" '$(RestoreSuccess)' == '' ">True</RestoreSuccess>
+    <RestoreTool Condition=" '$(RestoreTool)' == '' ">NuGet</RestoreTool>
+    <ProjectAssetsFile Condition=" '$(ProjectAssetsFile)' == '' ">$(MSBuildThisFileDirectory)project.assets.json</ProjectAssetsFile>
+    <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">$(UserProfile)\.nuget\packages\</NuGetPackageRoot>
+    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\nickw\.nuget\packages\;C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages</NuGetPackageFolders>
+    <NuGetProjectStyle Condition=" '$(NuGetProjectStyle)' == '' ">PackageReference</NuGetProjectStyle>
+    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.13.2</NuGetToolVersion>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <SourceRoot Include="C:\Users\nickw\.nuget\packages\" />
+    <SourceRoot Include="C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages\" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\acyclic.exe" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\acyclic.exe')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\acyclic.exe</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\acyclic.exe</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\bcomps.exe" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\bcomps.exe')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\bcomps.exe</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\bcomps.exe</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\cairo.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\cairo.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\cairo.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\cairo.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\ccomps.exe" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\ccomps.exe')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\ccomps.exe</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\ccomps.exe</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\cdt.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\cdt.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\cdt.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\cdt.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\cgraph.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\cgraph.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\cgraph.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\cgraph.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\concrt140.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\concrt140.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\concrt140.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\concrt140.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\config6" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\config6')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\config6</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\config6</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\dijkstra.exe" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\dijkstra.exe')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\dijkstra.exe</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\dijkstra.exe</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\dot.exe" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\dot.exe')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\dot.exe</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\dot.exe</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\expat.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\expat.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\expat.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\expat.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\fontconfig.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\fontconfig.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\fontconfig.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\fontconfig.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gc.exe" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gc.exe')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\gc.exe</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\gc.exe</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\glib-2.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\glib-2.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\glib-2.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\glib-2.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gml2gv.exe" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gml2gv.exe')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\gml2gv.exe</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\gml2gv.exe</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gobject-2.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gobject-2.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\gobject-2.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\gobject-2.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\graphml2gv.exe" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\graphml2gv.exe')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\graphml2gv.exe</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\graphml2gv.exe</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gvc.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gvc.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\gvc.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\gvc.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gvcolor.exe" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gvcolor.exe')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\gvcolor.exe</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\gvcolor.exe</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gvgen.exe" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gvgen.exe')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\gvgen.exe</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\gvgen.exe</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gvpack.exe" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gvpack.exe')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\gvpack.exe</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\gvpack.exe</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gvplugin_core.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gvplugin_core.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\gvplugin_core.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\gvplugin_core.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gvplugin_dot_layout.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gvplugin_dot_layout.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\gvplugin_dot_layout.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\gvplugin_dot_layout.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gvplugin_gd.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gvplugin_gd.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\gvplugin_gd.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\gvplugin_gd.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gvplugin_gdiplus.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gvplugin_gdiplus.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\gvplugin_gdiplus.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\gvplugin_gdiplus.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gvplugin_neato_layout.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gvplugin_neato_layout.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\gvplugin_neato_layout.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\gvplugin_neato_layout.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gvplugin_pango.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gvplugin_pango.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\gvplugin_pango.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\gvplugin_pango.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gxl2gv.exe" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\gxl2gv.exe')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\gxl2gv.exe</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\gxl2gv.exe</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\libgd.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\libgd.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\libgd.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\libgd.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\libharfbuzz-0.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\libharfbuzz-0.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\libharfbuzz-0.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\libharfbuzz-0.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\mm2gv.exe" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\mm2gv.exe')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\mm2gv.exe</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\mm2gv.exe</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\msvcp140.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\msvcp140.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\msvcp140.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\msvcp140.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\nop.exe" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\nop.exe')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\nop.exe</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\nop.exe</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\pango-1.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\pango-1.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\pango-1.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\pango-1.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\pangocairo-1.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\pangocairo-1.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\pangocairo-1.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\pangocairo-1.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\pangoft2-1.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\pangoft2-1.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\pangoft2-1.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\pangoft2-1.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\pangowin32-1.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\pangowin32-1.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\pangowin32-1.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\pangowin32-1.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\pathplan.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\pathplan.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\pathplan.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\pathplan.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\pixman-1.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\pixman-1.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\pixman-1.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\pixman-1.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\sccmap.exe" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\sccmap.exe')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\sccmap.exe</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\sccmap.exe</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\tred.exe" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\tred.exe')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\tred.exe</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\tred.exe</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\unflatten.exe" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\unflatten.exe')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\unflatten.exe</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\unflatten.exe</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\vcruntime140.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\vcruntime140.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\vcruntime140.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\vcruntime140.dll</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\xdot.dll" Condition="Exists('$(NuGetPackageRoot)graphviznet\1.0.3\contentFiles\any\any\graphviz\xdot.dll')">
+      <NuGetPackageId>GraphVizNet</NuGetPackageId>
+      <NuGetPackageVersion>1.0.3</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>graphviz\xdot.dll</TargetPath>
+      <DestinationSubDirectory>graphviz\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>graphviz\xdot.dll</Link>
+    </None>
+  </ItemGroup>
+</Project>
