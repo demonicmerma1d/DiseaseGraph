@@ -36,5 +36,22 @@ namespace DiseaseGraph.Extensions
             var variance = list.Aggregate((double)0,(total,add) => total + Math.Pow(add-average, 2))/list.Count;
             return variance;
         }
+        public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source, Random rng) //https://stackoverflow.com/a/1665080 
+        {
+            T[] elements = [.. source];
+            // Note i > 0 to avoid final pointless iteration
+            for (int i = elements.Length - 1; i > 0; i--)
+            {
+                // Swap element "i" with a random earlier element it (or itself)
+                int swapIndex = rng.Next(i + 1);
+                yield return elements[swapIndex];
+                elements[swapIndex] = elements[i];
+                // we don't actually perform the swap, we can forget about the
+                // swapped element because we already returned it.
+            }
+
+            // there is one item remaining that was not returned - we return it now
+            yield return elements[0]; 
+        } 
     }
 }

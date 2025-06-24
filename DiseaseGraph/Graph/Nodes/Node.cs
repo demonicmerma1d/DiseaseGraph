@@ -19,7 +19,7 @@ namespace DiseaseGraph.Graph
     public class Node //generic infection node type
     {
         public double InfectionTime;
-        protected readonly double TimeStep;
+        protected double TimeStep;
         public bool ChangeState;
         public double ViralLoad;
         public double BaseInfectChance;
@@ -93,6 +93,11 @@ namespace DiseaseGraph.Graph
             InfectionTime = infectionTime;
             Delay = incubationTime;
             ViralLoad = viralLoad;
+        }
+        public void UpdateTimeStep(double newTimeStep)
+        {
+            ArgumentOutOfRangeException.ThrowIfNegative(newTimeStep, $"{newTimeStep} must be greater or equal to zero.");
+            TimeStep = newTimeStep;
         }
     }
 }

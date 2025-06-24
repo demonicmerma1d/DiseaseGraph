@@ -10,11 +10,13 @@ namespace DiseaseGraph.Graph
         public CommunityGraph(int numNodes,int communitySize,double nodeOverlapProportion,double averageEdgeDensity,double internalEdgeProportion,
         double timeStep,double baseInfectionChance,double baseViralLoad,int? seed = null) : base(timeStep,baseViralLoad,seed)
         {
+            Stopwatch stopwatch = Stopwatch.StartNew();
             MakeGraph([.. Enumerable.Range(0,numNodes)],GraphEdgeList(numNodes, communitySize, nodeOverlapProportion, averageEdgeDensity, internalEdgeProportion),
                      [.. Enumerable.Repeat(baseInfectionChance, numNodes)]);
+            Console.WriteLine($"CommunityGraph {numNodes}:{stopwatch.Elapsed.TotalSeconds}");
         }
         public List<Edge<int>> GraphEdgeList(int numNodes,int communitySize,double nodeOverlapProportion,
-                double averageEdgeDensity,double internalEdgeProportion,bool symmetric = true)
+                double averageEdgeDensity,double internalEdgeProportion)
         {
             List<HashSet<int>> communities = [];
             List<int> allNodes = [.. Enumerable.Range(0, numNodes)];
@@ -36,7 +38,6 @@ namespace DiseaseGraph.Graph
         }
         protected List<Edge<int>> GenerateEdgeList(List<int> nodeList, List<HashSet<int>> communities, double averageEdgeDensity, double internalEdgeProportion)
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
             ArgumentOutOfRangeException.ThrowIfNegative(averageEdgeDensity);
             ArgumentOutOfRangeException.ThrowIfNegative(internalEdgeProportion);
             ArgumentOutOfRangeException.ThrowIfGreaterThan(averageEdgeDensity, 1);
@@ -91,7 +92,6 @@ namespace DiseaseGraph.Graph
                     }
                 }
             }
-            Console.WriteLine(stopwatch.Elapsed.TotalSeconds);
             return randomEdges;
         }
         private static HashSet<int> ConnectedNodesForNode(int sourceNode,Dictionary<int, HashSet<int>> connectedNodeData)

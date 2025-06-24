@@ -51,14 +51,20 @@ namespace DiseaseGraph.Graph
             _graph.AddEdgeRange(edgeList);
             NodeData = _graph.Vertices.ToDictionary(x => x,x => (TNode)NodeObj.Create(TimeStep,baseInfectionChances[x]));
         }
-        protected virtual bool UpdateInfection(double currentTime, double infectionTime,double incubationTime) //only works with 1 type of transmission vector
+        protected virtual void MakeGraph(List<int> vertexList,List<double> baseInfectionChances)
+        {
+            _graph = new();
+            _graph.AddVertexRange(vertexList);
+            NodeData = _graph.Vertices.ToDictionary(x => x,x => (TNode)NodeObj.Create(TimeStep,baseInfectionChances[x]));
+        }
+        protected virtual bool UpdateInfection(double currentTime, double infectionTime, double incubationTime) //only works with 1 type of transmission vector
         {
             HashSet<int> newInfectionChances = [];
             foreach (var nodeId in TrackedNodes)
             {
                 NodeState nodeState = NodeData[nodeId].Update();
                 if (NodeData[nodeId].ChangeState) ReportNodeChange(currentTime, nodeId);
-                switch (nodeState) 
+                switch (nodeState)
                 {
                     case NodeState.Susceptible:
                         TrackedNodes.Remove(nodeId);
@@ -103,18 +109,15 @@ namespace DiseaseGraph.Graph
             }
             return stopwatch.Elapsed.TotalSeconds;
         }
-        private void ResetNodes()
+        private void ResetNodes() //makes graph reusable
         {
             StateChanges.Clear();
             foreach (var node in NodeData.Values) node.Reset();
         }
-        public void ReplaceInfectionChances(List<int> newInfectionChances)
+        public void ReplaceInfectionChances(List<double> newInfectionChances)
         {
             if (newInfectionChances.Count != NodeData.Count) throw new Exception($"{newInfectionChances.Count} does not match the number of nodes,{NodeData.Count}");
-            for (int idx = 0; idx < newInfectionChances.Count; idx++)
-            {
-                NodeData[idx].BaseInfectChance = newInfectionChances[idx];
-            }
+            for (int idx = 0; idx < newInfectionChances.Count; idx++) NodeData[idx].BaseInfectChance = newInfectionChances[idx];
         }
         protected virtual bool TryInfectNode(int nodeId,double infectionTime,double incubationTime = 0) 
         {
@@ -146,7 +149,6 @@ namespace DiseaseGraph.Graph
         protected List<Edge<int>> GenerateEdgeList(List<int> nodeList,double proportion,bool requireConnected = true,
                 bool symmetric = true)
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
             ArgumentOutOfRangeException.ThrowIfNegative(proportion);
             ArgumentOutOfRangeException.ThrowIfGreaterThan(proportion,1);
             HashSet<Edge<int>> possibleEdges = CompleteGraphEdges(nodeList);
@@ -186,7 +188,6 @@ namespace DiseaseGraph.Graph
                 edgeList.Add(mirror);
                 edgeCount++;
             }
-            Console.WriteLine(stopwatch.Elapsed.TotalSeconds);
             return edgeList;
         }
         public GraphBase<TNode> Copy()
@@ -252,9 +253,14 @@ namespace DiseaseGraph.Graph
         {
             return new(StateChangesCopy(), _graph, [..NodeData.Keys],FileName());
         }
-        public void UpdateBaseInfectionChance(double newChance)
+        public void UpdateBaseInfectionChanceToAll(double newChance)
         {
-            foreach (TNode node in NodeData.Values) node.BaseInfectChance = newChance;
+            ReplaceInfectionChances([.. Enumerable.Repeat(newChance, NodeData.Count)]);
+        }
+        public void UpdateTimestep(double newTimestep)
+        {
+            ArgumentOutOfRangeException.ThrowIfNegative(newTimestep, $"{newTimestep} must be greater or equal to zero");
+            foreach (var node in NodeData.Values) node.UpdateTimeStep(newTimestep);
         }
     }
 }

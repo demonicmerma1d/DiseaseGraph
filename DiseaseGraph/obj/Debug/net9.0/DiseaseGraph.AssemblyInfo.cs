@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DiseaseGraph")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e26b108742e7971305a7f625610b3499d9e24c7c")]
 [assembly: System.Reflection.AssemblyProductAttribute("DiseaseGraph")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DiseaseGraph")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -12,7 +12,8 @@
           "GraphVizNet": "1.0.3",
           "QuikGraph": "2.5.0",
           "QuikGraph.Graphviz": "2.5.0",
-          "ScottPlot": "5.0.55"
+          "ScottPlot": "5.0.55",
+          "morelinq": "4.4.0"
         },
         "runtime": {
           "DiseaseGraph.dll": {}
@@ -98,6 +99,14 @@
             "rid": "win-x86",
             "assetType": "native",
             "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "morelinq/4.4.0": {
+        "runtime": {
+          "lib/net9.0/MoreLinq.dll": {
+            "assemblyVersion": "4.4.0.0",
+            "fileVersion": "4.4.0.0"
           }
         }
       },
@@ -262,6 +271,13 @@
       "sha512": "sha512-RPxRXD16KtSs8Yxr2RK9Qs7AwyN9MlpqZIYs0AvfaJwl7RAtVhC0+u2f2SKwX0uMYYd3O98Z+OBA1sj6aWVKQA==",
       "path": "harfbuzzsharp.nativeassets.win32/7.3.0.3",
       "hashPath": "harfbuzzsharp.nativeassets.win32.7.3.0.3.nupkg.sha512"
+    },
+    "morelinq/4.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-QX3bsK9oFeUXk8tFsc9NkI6NnCr8Ar/ex027p+ZZ/jdLCdX2RlryDtxUqZW5j45NVwn4E4Z4hzupsoMQd6Yxtg==",
+      "path": "morelinq/4.4.0",
+      "hashPath": "morelinq.4.4.0.nupkg.sha512"
     },
     "QuikGraph/2.5.0": {
       "type": "package",

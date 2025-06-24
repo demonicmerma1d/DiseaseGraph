@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "5n45LL5G1EI=",
+  "dgSpecHash": "Rz11uf8UJy0=",
   "success": true,
   "projectFilePath": "C:\\Users\\nickw\\source\\repos\\DiseaseGraph\\DiseaseGraph\\DiseaseGraph.csproj",
   "expectedPackageFiles": [
@@ -10,6 +10,7 @@
     "C:\\Users\\nickw\\.nuget\\packages\\harfbuzzsharp.nativeassets.linux\\7.3.0.3\\harfbuzzsharp.nativeassets.linux.7.3.0.3.nupkg.sha512",
     "C:\\Users\\nickw\\.nuget\\packages\\harfbuzzsharp.nativeassets.macos\\7.3.0.3\\harfbuzzsharp.nativeassets.macos.7.3.0.3.nupkg.sha512",
     "C:\\Users\\nickw\\.nuget\\packages\\harfbuzzsharp.nativeassets.win32\\7.3.0.3\\harfbuzzsharp.nativeassets.win32.7.3.0.3.nupkg.sha512",
+    "C:\\Users\\nickw\\.nuget\\packages\\morelinq\\4.4.0\\morelinq.4.4.0.nupkg.sha512",
     "C:\\Users\\nickw\\.nuget\\packages\\quikgraph\\2.5.0\\quikgraph.2.5.0.nupkg.sha512",
     "C:\\Users\\nickw\\.nuget\\packages\\quikgraph.graphviz\\2.5.0\\quikgraph.graphviz.2.5.0.nupkg.sha512",
     "C:\\Users\\nickw\\.nuget\\packages\\scottplot\\5.0.55\\scottplot.5.0.55.nupkg.sha512",

@@ -82,3 +82,5 @@ C:\Users\nickw\source\repos\DiseaseGraph\DiseaseGraph\bin\Debug\net9.0\graphviz\
 C:\Users\nickw\source\repos\DiseaseGraph\DiseaseGraph\bin\Debug\net9.0\graphviz\vcruntime140.dll
 C:\Users\nickw\source\repos\DiseaseGraph\DiseaseGraph\bin\Debug\net9.0\graphviz\xdot.dll
 C:\Users\nickw\source\repos\DiseaseGraph\DiseaseGraph\bin\Debug\net9.0\GraphVizNet.dll
+C:\Users\nickw\source\repos\DiseaseGraph\DiseaseGraph\obj\Debug\net9.0\DiseaseGraph.sourcelink.json
+C:\Users\nickw\source\repos\DiseaseGraph\DiseaseGraph\bin\Debug\net9.0\MoreLinq.dll

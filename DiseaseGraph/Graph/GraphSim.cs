@@ -39,14 +39,14 @@ namespace DiseaseGraph.Graph
         }
         public static void GraphParamTestNodeCount(int numNodes)
         {
-            var graph = new Graph<IncubateNode>(numNodes,EdgeDensity(numNodes,10),0.1,0.01,1);
+            var graph = new ERGraph<IncubateNode>(numNodes,EdgeDensity(numNodes,10),0.1,0.01,1);
             
         }
         public static void GraphParamTestNodeCountConst(int repeatCount,int[] numNodes,double proportion,double baseInfectionChance, double? aveNodeDegree = null)
         {
             foreach (var nodeCount in numNodes)
             {
-                var graph = new Graph<IncubateNode>(nodeCount, aveNodeDegree != null ? EdgeDensity(nodeCount,(double)aveNodeDegree): proportion, 0.1, baseInfectionChance, 1,0);
+                var graph = new ERGraph<IncubateNode>(nodeCount, aveNodeDegree != null ? EdgeDensity(nodeCount,(double)aveNodeDegree): proportion, 0.1, baseInfectionChance, 1,0);
                 for (int i=0; i < repeatCount; i++)
                 {
                     graph.Run(100, [graph.Random.Next(graph.NodeData.Count)], 1, 1);
@@ -60,9 +60,9 @@ namespace DiseaseGraph.Graph
         {
             return 1 - DataProcessor.TotalStateMembers(graph).MaxBy(state => state.Key).Value[(int)NodeState.Susceptible]/graph.NodeData.Count;
         }
-        public static List<double> DieoutProportions(int numNodes, int repeatCount, double proportion,double baseInfectionChance, double? aveNodeDegree = null)
+        public static List<double> InfectedProportions(int numNodes, int repeatCount, double proportion,double baseInfectionChance, double? aveNodeDegree = null)
         {
-            var graph = new Graph<IncubateNode>(numNodes, aveNodeDegree != null ? EdgeDensity(numNodes, (double)aveNodeDegree) : proportion, 0.1, baseInfectionChance, 1);
+            var graph = new ERGraph<IncubateNode>(numNodes, aveNodeDegree != null ? EdgeDensity(numNodes, (double)aveNodeDegree) : proportion, 0.1, baseInfectionChance, 1);
             List<double> proportions = [];
             for (var i=0; i < repeatCount; i++)
             {
@@ -71,13 +71,13 @@ namespace DiseaseGraph.Graph
             }
             return proportions;
         }
-        public static Dictionary<double,double[]> DieoutProportionsByBaseInfectionChance(int numNodes, int repeatCount, double proportion,double[] baseInfectionChances, double? aveNodeDegree = null)
+        public static Dictionary<double,double[]> InfectedProportionsByBaseInfectionChance(int numNodes, int repeatCount, double proportion,double[] baseInfectionChances, double? aveNodeDegree = null)
         {
-            var graph = new Graph<IncubateNode>(numNodes, aveNodeDegree != null ? EdgeDensity(numNodes, (double)aveNodeDegree) : proportion, 0.1, 0, 1);
+            var graph = new ERGraph<IncubateNode>(numNodes, aveNodeDegree != null ? EdgeDensity(numNodes, (double)aveNodeDegree) : proportion, 0.1, 0, 1);
             Dictionary<double, List<double>> proportionDict = [];
             foreach (double baseInfectionChance in baseInfectionChances)
             {
-                graph.UpdateBaseInfectionChance(baseInfectionChance);
+                graph.UpdateBaseInfectionChanceToAll(baseInfectionChance);
                 proportionDict[baseInfectionChance] = [];
                 for (var i=0; i < repeatCount; i++)
                 {
@@ -87,47 +87,48 @@ namespace DiseaseGraph.Graph
             }
             return proportionDict.ToDictionary(x => x.Key,x => x.Value.ToArray());
         }
-        public static void PlotDieoutBaseInfect(int numNodes, int repeatCount, double proportion,double[] baseInfectionChances, double? aveNodeDegree = null)
-        {
-            var dieoutProportions = DieoutProportionsByBaseInfectionChance(numNodes, repeatCount, proportion, baseInfectionChances, aveNodeDegree);
-            DataPlots.PlotInfectionStatGraph(dieoutProportions, x => x.Variance(), "Variance of dieout proportion by base infection chance", "BaseInfectionChance","Variance", $"VarBIC-{numNodes}-{proportion}");
-            DataPlots.PlotInfectionStatGraph(dieoutProportions, x => x.Average(), "Mean of dieout proportion by base infection chance", "BaseInfectionChance","Mean", $"MeanBIC-{numNodes}-{proportion}");
-        }
-        public static Dictionary<double,double[]> DieoutProportionsByNodeCount(int[] nodeCounts,int repeatCount,double proportion,double baseInfectionChance,double? aveNodeDegree = null)
+        public static Dictionary<double,double[]> InfectedProportionsByNodeCount(int[] nodeCounts,int repeatCount,double proportion,double baseInfectionChance,double? aveNodeDegree = null)
         {
             List<KeyValuePair<double, List<double>>> dieoutProportionsByNodeCount = [.. from nodeCount in nodeCounts
-                select new KeyValuePair<double,List<double>>(nodeCount,DieoutProportions(nodeCount,repeatCount,proportion,baseInfectionChance,aveNodeDegree))];
+                select new KeyValuePair<double,List<double>>(nodeCount,InfectedProportions(nodeCount,repeatCount,proportion,baseInfectionChance,aveNodeDegree))];
             return dieoutProportionsByNodeCount.ToDictionary(x => x.Key,x=> x.Value.ToArray());
         }
-        public static void PlotDieoutNodeCount(int[] nodeCounts,int repeatCount,double proportion,double baseInfectionChance,double? aveNodeDegree = null)
-        {
-            var dieoutProportions = DieoutProportionsByNodeCount(nodeCounts, repeatCount, proportion, baseInfectionChance, aveNodeDegree);
-            DataPlots.PlotInfectionStatGraph(dieoutProportions, x => x.Variance(), "Variance of dieout proportion by node count", "NodeCount", "Variance", $"VarNC-{baseInfectionChance}-{proportion}",3);
-            DataPlots.PlotInfectionStatGraph(dieoutProportions, x => x.Average(), "Mean of dieout proportion by node count", "NodeCount", "Mean", $"MeanNC-{baseInfectionChance}-{proportion}",3);
-        }
-        public static Dictionary<double,double[]> DieoutProportionsByProportion(int nodeCount,int repeatCount,double[] proportions,double baseInfectionChance)
+        public static Dictionary<double,double[]> InfectedProportionsByProportion(int nodeCount,int repeatCount,double[] proportions,double baseInfectionChance)
         {
             List<KeyValuePair<double, List<double>>> dieoutProportionsByNodeCount = [.. from proportion in proportions
-                select new KeyValuePair<double,List<double>>(nodeCount,DieoutProportions(nodeCount,repeatCount,proportion,baseInfectionChance))];
+                select new KeyValuePair<double,List<double>>(nodeCount,InfectedProportions(nodeCount,repeatCount,proportion,baseInfectionChance))];
             return dieoutProportionsByNodeCount.ToDictionary(x => x.Key,x=> x.Value.ToArray());
         }
-        public static Dictionary<double,double[]> DieoutProportionsByAveDeg(int nodeCount,int repeatCount,double baseInfectionChance,double[] aveNodeDegrees)
+        public static Dictionary<double,double[]> InfectedProportionsByAveDeg(int nodeCount,int repeatCount,double baseInfectionChance,double[] aveNodeDegrees)
         {
             List<KeyValuePair<double, List<double>>> dieoutProportionsByNodeCount = [.. from aveNodeDegree in aveNodeDegrees
-                select new KeyValuePair<double,List<double>>(nodeCount,DieoutProportions(nodeCount,repeatCount,0,baseInfectionChance,aveNodeDegree))];
+                select new KeyValuePair<double,List<double>>(nodeCount,InfectedProportions(nodeCount,repeatCount,0,baseInfectionChance,aveNodeDegree))];
             return dieoutProportionsByNodeCount.ToDictionary(x => x.Key,x=> x.Value.ToArray());
         }
-        public static void PlotDieoutByProportion(int nodeCount,int repeatCount,double baseInfectionChance,double[] proportions)
+        public static void PlotInfectedBaseInfect(int numNodes, int repeatCount, double proportion,double[] baseInfectionChances, double? aveNodeDegree = null)
         {
-            var dieoutProportions = DieoutProportionsByProportion(nodeCount, repeatCount, proportions, baseInfectionChance);
-            DataPlots.PlotInfectionStatGraph(dieoutProportions, x => x.Variance(), "Variance of dieout proportion by edge density", "density", "Variance", $"VarP-{nodeCount}-{baseInfectionChance}",0.001);
-            DataPlots.PlotInfectionStatGraph(dieoutProportions, x => x.Average(), "Mean of dieout proportion by edge density", "density", "Mean", $"MeanP-{nodeCount}-{baseInfectionChance}",0.001);
+            var dieoutProportions = InfectedProportionsByBaseInfectionChance(numNodes, repeatCount, proportion, baseInfectionChances, aveNodeDegree);
+            DataPlots.PlotInfectionStatGraph(dieoutProportions, x => x.Variance(), "Variance of infected proportion by base infection chance", "BaseInfectionChance","Variance", $"VarBIC-{numNodes}-{proportion}",10);
+            DataPlots.PlotInfectionStatGraph(dieoutProportions, x => x.Average(), "Mean of infected proportion by base infection chance", "BaseInfectionChance","Mean", $"MeanBIC-{numNodes}-{proportion}",10);
         }
-        public static void PlotDieoutByAveNodeDeg(int nodeCount,int repeatCount,double baseInfectionChance,double[] aveNodeDegrees)
+        public static void PlotInfectedNodeCount(int[] nodeCounts,int repeatCount,double proportion,double baseInfectionChance,double? aveNodeDegree = null)
         {
-            var dieoutProportions = DieoutProportionsByAveDeg(nodeCount, repeatCount,baseInfectionChance,aveNodeDegrees);
-            DataPlots.PlotInfectionStatGraph(dieoutProportions, x => x.Variance(), "Variance of dieout proportion by average node degree", "average node degree", "Variance", $"VarAND-{nodeCount}-{baseInfectionChance}",0.001);
-            DataPlots.PlotInfectionStatGraph(dieoutProportions, x => x.Average(), "Mean of dieout proportion by average node  degree", "average node degree", "Mean", $"MeanAND-{nodeCount}-{baseInfectionChance}",0.001);
+            var dieoutProportions = InfectedProportionsByNodeCount(nodeCounts, repeatCount, proportion, baseInfectionChance, aveNodeDegree);
+            DataPlots.PlotInfectionStatGraph(dieoutProportions, x => x.Variance(), "Variance of infected proportion by node count", "NodeCount", "Variance", $"VarNC-{baseInfectionChance}-{proportion}",3);
+            DataPlots.PlotInfectionStatGraph(dieoutProportions, x => x.Average(), "Mean of infected proportion by node count", "NodeCount", "Mean", $"MeanNC-{baseInfectionChance}-{proportion}",3);
         }
+        public static void PlotInfectedByProportion(int nodeCount,int repeatCount,double baseInfectionChance,double[] proportions)
+        {
+            var dieoutProportions = InfectedProportionsByProportion(nodeCount, repeatCount, proportions, baseInfectionChance);
+            DataPlots.PlotInfectionStatGraph(dieoutProportions, x => x.Variance(), "Variance of infected proportion by edge density", "density", "Variance", $"VarP-{nodeCount}-{baseInfectionChance}",5);
+            DataPlots.PlotInfectionStatGraph(dieoutProportions, x => x.Average(), "Mean of infected proportion by edge density", "density", "Mean", $"MeanP-{nodeCount}-{baseInfectionChance}",5);
+        }
+        public static void PlotInfectedByAveNodeDeg(int nodeCount,int repeatCount,double baseInfectionChance,double[] aveNodeDegrees)
+        {
+            var dieoutProportions = InfectedProportionsByAveDeg(nodeCount, repeatCount,baseInfectionChance,aveNodeDegrees);
+            DataPlots.PlotInfectionStatGraph(dieoutProportions, x => x.Variance(), "Variance of infected proportion by average node degree", "average node degree", "Variance", $"VarAND-{nodeCount}-{baseInfectionChance}",5);
+            DataPlots.PlotInfectionStatGraph(dieoutProportions, x => x.Average(), "Mean of infected proportion by average node  degree", "average node degree", "Mean", $"MeanAND-{nodeCount}-{baseInfectionChance}",5);
+        }
+        
     }
 } 

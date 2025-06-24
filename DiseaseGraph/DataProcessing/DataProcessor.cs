@@ -3,6 +3,8 @@ using DiseaseGraph.Extensions;
 using QuikGraph.Algorithms.ShortestPath;
 using QuikGraph;
 using QuikGraph.Algorithms;
+using System.Security.Cryptography.X509Certificates;
+using QuikGraph.Graph;
 
 namespace DiseaseGraph.DataProcessing
 {
@@ -56,10 +58,40 @@ namespace DiseaseGraph.DataProcessing
             TryFunc<int, IEnumerable<Edge<int>>> tryGetPath = graph.Graph.ShortestPathsDijkstra(x => 1, rootNode);
             return tryGetPath;
         }
-/*         public static Dictionary<double,double[]> InfectionStatsByDistance(DataGraph graph,int rootNode)
+        public static double GlobalClusterCoeff(DataGraph graph)
         {
-            var distanceFunc = ShortestPathFromRoot(graph, rootNode);
-            
-        }  */      
+            var graphCopy = new UndirectedGraph<int,Edge<int>>();
+            graphCopy.AddVertexRange(graph.Graph.Vertices);
+            graphCopy.AddEdgeRange(graph.Graph.Edges.Where(e => e.Source < e.Target));
+            double triplets = 0;
+            double triangleCount = 0;
+            while (graphCopy.EdgeCount > 1)
+            {
+                Edge<int> edge = graphCopy.Edges.First();
+                graphCopy.RemoveEdge(edge);
+                triplets += graphCopy.AdjacentEdges(edge.Source).Count();
+                triplets += graphCopy.AdjacentEdges(edge.Target).Count();
+                triangleCount += graphCopy.AdjacentEdges(edge.Source).Select(e => e.Target).Intersect(graphCopy.AdjacentEdges(edge.Target).Select(e => e.Target)).Count();
+            }
+            return 3*triangleCount/triplets; //global clustering coeff
+        }
+        public static double SmallWorldIndex(DataGraph graph) //relies on having an even numNodes or even integer ave degree
+        {
+            int numNodes = graph.NodeData.Count;
+            var randomGraph = new ERGraph<Node>(numNodes, graph.EdgeDensity(), 0, 0, 0).ToDataGraph();
+            Console.WriteLine(graph.Graph.Edges.Count() / numNodes);
+            var latticeGraph = new SWGraph<Node>(numNodes, 0, 0, 0,graph.Graph.EdgeCount/numNodes, 0).ToDataGraph();
+            var clusterCoeff_R = GlobalClusterCoeff(randomGraph);
+            var clusterCoeff_L = GlobalClusterCoeff(latticeGraph);
+            var avePath_R = AverageShortestPath(randomGraph);
+            var avePath_L = AverageShortestPath(latticeGraph);
+            return SmallWorldIndex(graph, clusterCoeff_R, clusterCoeff_L, avePath_R, avePath_L);
+        }
+        public static double SmallWorldIndex(DataGraph graph,double clusterCoeff_R,double clusterCoeff_L,double avePath_R,double avePath_L)
+        {
+            var clusterCoeff = GlobalClusterCoeff(graph);
+            var avePath = AverageShortestPath(graph);
+            return (avePath - avePath_L) * (clusterCoeff - clusterCoeff_R) / ((avePath_R - avePath_L) * (clusterCoeff_L-clusterCoeff_R));
+        }
     } 
 }

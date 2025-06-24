@@ -99,14 +99,31 @@ namespace DiseaseGraph.DataProcessing
             plot.Axes.Bottom.Label.Text = xAxis;
             plot.Axes.Left.Label.Text = yAxis;
         }
-        public static void PlotInfectionStatGraph(Dictionary<double,double[]> dieoutProportions,Func<double[],double> aggregate,string title,string xVar,string yVar,string saveNameData,double smoothMidRange=0.0001)
+        public static void PlotInfectionStatGraph(Dictionary<double,double[]> infectedProportions,Func<double[],double> aggregate,string title,string xVar,string yVar,string saveNameData,int size)
         {
             var plot = new Plot();
             
-            var smoothedData = DataUtilities.SmoothData(dieoutProportions,smoothMidRange);
-            plot.Add.ScatterLine(dieoutProportions.Select(x => x.Key).ToList(), [.. dieoutProportions.Select(x => aggregate(x.Value))]);
-            plot.Add.ScatterLine(smoothedData.Select(x => x.Key).ToList(), [.. smoothedData.Select(x => aggregate(x.Value))]);
+            Dictionary<double,double> infectedDataProcessed = infectedProportions.ToDictionary(x => x.Key,x => aggregate(x.Value));
+            var plt = plot.Add.ScatterLine(infectedProportions.Select(x => x.Key).ToList(), [.. infectedProportions.Select(x => aggregate(x.Value))]);
+            plt.LegendText = "normal";
+            var smoothedData = DataUtilities.SmoothDataAverage(infectedDataProcessed,size).OrderBy(x => x.Key);
+            var smhplt = plot.Add.ScatterLine(smoothedData.Select(x => x.Key).ToList(), [.. smoothedData.Select(x => x.Value)]);
+            smhplt.LegendText = "smooth";
             SetAxes(ref plot, title,xVar,yVar);
+            plot.ShowLegend();
+            plot.Save(DataUtilities.ValidFileName(SavePath,saveNameData+$"-{DateTime.Now:yyyyMMddHHmmss}", ".png"), 800, 500);
+        }
+        public static void PlotInfectionStatGraphTest(Dictionary<double,double[]> infectedProportions,Func<double[],double> aggregate,string title,string xVar,string yVar,string saveNameData,int size)
+        {
+            var plot = new Plot();
+            Dictionary<double,double> infectedDataProcessed = infectedProportions.ToDictionary(x => x.Key,x => aggregate(x.Value));
+            var plt = plot.Add.ScatterLine(infectedProportions.Select(x => x.Key).ToList(), [.. infectedDataProcessed.OrderBy(x => x.Key).Select(x => x.Value)]);
+            plt.LegendText = "normal";
+            var smoothedData = DataUtilities.SmoothDataAverage(infectedDataProcessed,size).OrderBy(x => x.Key);
+            var smhplt = plot.Add.ScatterLine(smoothedData.Select(x => x.Key).ToList(), [.. smoothedData.Select(x => x.Value)]);
+            smhplt.LegendText = "smooth";
+            SetAxes(ref plot, title,xVar,yVar);
+            plot.ShowLegend();
             plot.Save(DataUtilities.ValidFileName(SavePath,saveNameData+$"-{DateTime.Now:yyyyMMddHHmmss}", ".png"), 800, 500);
         }
     }

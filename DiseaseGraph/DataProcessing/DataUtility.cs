@@ -1,5 +1,3 @@
-
-
 namespace DiseaseGraph.DataProcessing
 {
     public static class DataUtilities
@@ -28,6 +26,22 @@ namespace DiseaseGraph.DataProcessing
                 smoothedData.Add(time, smoothFunc(time, paramRangeFromMidpoint));
             }
             return smoothedData;
+        }
+        public static Dictionary<double,double> SmoothDataAverage(Dictionary<double,double> data,int size) // rolling average of data for smoothing
+        {
+            var orderedData = data.OrderBy(kvp => kvp.Key);
+            return orderedData.GetRollingAverages(size).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        }
+        public static IEnumerable<KeyValuePair<double,double>> GetRollingAverages(this IEnumerable<KeyValuePair<double,double>> data,int size) //assumes consistent length of double[]
+        {
+            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(size, 0, "sample size must be positive");
+            Queue<double> values = new();
+            foreach (var kvp in data)
+            {
+                values.Enqueue(kvp.Value);
+                if (values.Count > size) values.Dequeue();
+                yield return new KeyValuePair<double, double>(kvp.Key,values.Average());
+            }
         }
     }
 } 
