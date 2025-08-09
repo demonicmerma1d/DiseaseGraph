@@ -52,6 +52,10 @@ namespace DiseaseGraph.Extensions
 
             // there is one item remaining that was not returned - we return it now
             yield return elements[0]; 
-        } 
+        }
+        public static string[] ArrString<T>(this T[] array)
+        {
+            return array.Select(item=> item.ToString()).ToArray();
+        }
     }
 }

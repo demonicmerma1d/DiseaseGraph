@@ -3,8 +3,8 @@ namespace DiseaseGraph.Graph
     public class IncubateNode : Node
     {
         public IncubateNode(){}
-        protected IncubateNode(double timeStep, double baseInfectChance, double infectionTime = 0, double incubationTime = 0)
-            : base(timeStep, baseInfectChance, infectionTime, incubationTime) { }
+        protected IncubateNode(NodeParams nodeParams)
+            : base(nodeParams) { }
         protected override void AdvanceState()
         {
             ChangeState = true;
@@ -41,10 +41,9 @@ namespace DiseaseGraph.Graph
             else Delay -= TimeStep;
             return NodeState;
         }
-        public override IncubateNode Create(params double[] args)
+        public override IncubateNode Create(NodeParams nodeParams)
         {
-            if (args.Length < 2) throw new ArgumentException($"{args.Length} values given, at least 2 values are required");
-            return new(args[0],args[1]);
+            return new(nodeParams);
         }
     }
 }

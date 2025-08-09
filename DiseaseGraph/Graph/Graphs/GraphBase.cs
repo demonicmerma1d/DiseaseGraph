@@ -3,7 +3,6 @@ using DiseaseGraph.Extensions;
 using QuikGraph;
 using FastDeepCloner;
 using DiseaseGraph.DataProcessing;
-using ScottPlot.FontResolvers;
 
 namespace DiseaseGraph.Graph
 {
@@ -13,6 +12,24 @@ namespace DiseaseGraph.Graph
         public readonly NodeState OldNodeState = oldNodeState;
         public readonly NodeState NodeState = nodeState;
         public readonly bool IsAlive = isAlive;
+    }
+    public struct RunParams
+    {
+        public double InfectionTime = 0;
+        public double Delay = 0;
+        public double ReinfectionTime = 0;
+        public double TimeUntilIsolation = 0;
+        public RunParams(double infectionTime, double delay)
+        {
+            InfectionTime = infectionTime;
+            Delay = delay;
+        }
+        public RunParams(double infectionTime,double delay,double timeUntilIsolation)
+        {
+            InfectionTime = infectionTime;
+            Delay = delay;
+            TimeUntilIsolation = timeUntilIsolation;
+        }
     }
     public abstract class GraphBase<TNode>
     where TNode : Node, new()
@@ -30,7 +47,7 @@ namespace DiseaseGraph.Graph
         public Dictionary<double,HashSet<NodeTimeEntry>> StateChanges;
         public AdjacencyGraph<int,Edge<int>> _graph;
         public Dictionary<int,TNode> NodeData;
-        protected double TimeStep;
+        public double TimeStep { get; protected set; }
         private HashSet<int> TrackedNodes;
         private HashSet<int> InfectedNodes;
         public Random Random;
@@ -46,18 +63,26 @@ namespace DiseaseGraph.Graph
         }
         protected virtual void MakeGraph(List<int> vertexList,List<Edge<int>> edgeList,List<double> baseInfectionChances)
         {
-            _graph = new();
-            _graph.AddVertexRange(vertexList);
-            _graph.AddEdgeRange(edgeList);
-            NodeData = _graph.Vertices.ToDictionary(x => x,x => (TNode)NodeObj.Create(TimeStep,baseInfectionChances[x]));
+            NodeParams nodeParams = new(TimeStep,baseInfectionChances.First()); //assuming by default that all base infection chances are equal and non empty
+            MakeGraph(vertexList,edgeList,nodeParams);
         }
         protected virtual void MakeGraph(List<int> vertexList,List<double> baseInfectionChances)
         {
+            NodeParams nodeParams = new(TimeStep,baseInfectionChances.First()); //assuming by default that all base infection chances are equal and non empty
+            MakeGraph(vertexList,nodeParams);
+        }
+        protected virtual void MakeGraph(List<int> vertexList,List<Edge<int>> edgeList, NodeParams nodeParams)
+        {
+            MakeGraph(vertexList, nodeParams);
+            _graph.AddEdgeRange(edgeList);
+        }
+        protected virtual void MakeGraph(List<int> vertexList,NodeParams nodeParams)
+        {
             _graph = new();
             _graph.AddVertexRange(vertexList);
-            NodeData = _graph.Vertices.ToDictionary(x => x,x => (TNode)NodeObj.Create(TimeStep,baseInfectionChances[x]));
+            NodeData = _graph.Vertices.ToDictionary(x => x,x => (TNode)NodeObj.Create(nodeParams));
         }
-        protected virtual bool UpdateInfection(double currentTime, double infectionTime, double incubationTime) //only works with 1 type of transmission vector
+        protected virtual bool UpdateInfection(double currentTime, RunParams runParams) //only works with 1 type of transmission vector
         {
             HashSet<int> newInfectionChances = [];
             foreach (var nodeId in TrackedNodes)
@@ -67,7 +92,8 @@ namespace DiseaseGraph.Graph
                 switch (nodeState)
                 {
                     case NodeState.Susceptible:
-                        TrackedNodes.Remove(nodeId);
+                        if (NodeData[nodeId].HasReinfectionTimer) break; //retain tracking of susceptible nodes if required for reinfection
+                        TrackedNodes.Remove(nodeId); 
                         break;
                     case NodeState.Removed:
                         if (NodeData[nodeId].MarkedAsInfected)
@@ -79,7 +105,8 @@ namespace DiseaseGraph.Graph
                         break;
                     case NodeState.Exposed:
                         break;
-                    case NodeState.Infectious:  //case of active infection spreading                         
+                    case NodeState.Infectious:  //case of active infection spreading  
+                        if (NodeData[nodeId].IsIsolating) break;                       
                         foreach (var edge in _graph.OutEdges(nodeId))
                         {
                             if (!(NodeData[edge.Target].NodeState == NodeState.Susceptible)) continue;
@@ -91,23 +118,27 @@ namespace DiseaseGraph.Graph
                         throw new Exception($"Invalid NodeState for node {nodeId} at time {currentTime}");
                 }
             }
-            foreach (int nodeId in newInfectionChances) TryInfectNode(nodeId, infectionTime, incubationTime);
+            foreach (int nodeId in newInfectionChances) TryInfectNode(nodeId, runParams);
             return InfectedNodes.Count != 0;
         }
-        public double Run(double maxTime,List<int> seedInfections,double infectionTime,double incubationTime = 0)
+        public double Run(double maxTime,List<int> seedInfections,RunParams runParams)
         {
             ResetNodes();
             Stopwatch stopwatch = Stopwatch.StartNew();
             foreach (var nodeId in seedInfections)
             {
-                InfectNode(nodeId, infectionTime, incubationTime);
+                InfectNode(nodeId, runParams);
                 ReportNodeChange(0, nodeId);
             }
             for (double currentTime = 0; currentTime < maxTime; currentTime += TimeStep)
             {
-                if (!UpdateInfection(currentTime, infectionTime, incubationTime)) break;
+                if (!UpdateInfection(currentTime, runParams)) break;
             }
             return stopwatch.Elapsed.TotalSeconds;
+        }
+        public double RunRandom(double maxTime,RunParams runParams)
+        {
+            return Run(maxTime,[Random.Next(NodeData.Count)],runParams);
         }
         private void ResetNodes() //makes graph reusable
         {
@@ -119,24 +150,25 @@ namespace DiseaseGraph.Graph
             if (newInfectionChances.Count != NodeData.Count) throw new Exception($"{newInfectionChances.Count} does not match the number of nodes,{NodeData.Count}");
             for (int idx = 0; idx < newInfectionChances.Count; idx++) NodeData[idx].BaseInfectChance = newInfectionChances[idx];
         }
-        protected virtual bool TryInfectNode(int nodeId,double infectionTime,double incubationTime = 0) 
+        protected virtual bool TryInfectNode(int nodeId,RunParams runParams) 
         {
             double infectionThreshold = NodeData[nodeId].BaseInfectChance * NodeData[nodeId].ViralLoad;
             double infectedCall = Random.NextDouble();
             if (infectedCall <= infectionThreshold)
             {
-                InfectNode(nodeId, infectionTime, incubationTime, infectionThreshold,infectedCall);
+                InfectNode(nodeId,runParams, infectionThreshold,infectedCall);
                 return true;
             }
             NodeData[nodeId].ViralLoad = 0;
             return false;
         }
-        protected virtual void InfectNode(int nodeId,double infectionTime,double incubationTime,double infectionThreshold=0,double infectedCall=0) //change here for modififying infection chance behaviour
+        protected virtual void InfectNode(int nodeId,RunParams runParams,double infectionThreshold=0,double infectedCall=0) //change here for modififying infection chance behaviour
         {
-            NodeData[nodeId].Infect(infectionTime,incubationTime,NodeData[nodeId].GetViralLoad(infectionThreshold,infectedCall,BaseViralLoad));
+            NodeData[nodeId].Infect(runParams,NodeData[nodeId].GetViralLoad(infectionThreshold,infectedCall,BaseViralLoad));
             InfectedNodes.Add(nodeId);
             TrackedNodes.Add(nodeId);
             NodeData[nodeId].MarkedAsInfected = true;
+            if (NodeData[nodeId].IsolateChance > 0) NodeData[nodeId].WillIsolate = Random.NextDouble() < NodeData[nodeId].IsolateChance;
         }
         private void ReportNodeChange(double currentTime,int nodeId)
         {
@@ -261,6 +293,7 @@ namespace DiseaseGraph.Graph
         {
             ArgumentOutOfRangeException.ThrowIfNegative(newTimestep, $"{newTimestep} must be greater or equal to zero");
             foreach (var node in NodeData.Values) node.UpdateTimeStep(newTimestep);
+            TimeStep = newTimestep;
         }
     }
 }

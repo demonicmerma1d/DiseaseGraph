@@ -27,6 +27,16 @@ namespace DiseaseGraph.DataProcessing
             }
             return totalStateChangeByTime;
         }
+        public static List<double?>[] SplitNodeStatesToLists(this Dictionary<double,double[]> dictData,NodeState[] nodeStates, out List<double> keyTimes)
+        {
+            keyTimes = [.. dictData.Keys];
+            List<double?>[] outData = new List<double?>[dictData.Values.First().Length]; //assuming length is consistent
+            for (int i = 0; i < dictData.Values.First().Length; i++)
+            {
+                outData[i] = [.. keyTimes.Select(x => dictData[x][i])];
+            }
+            return [.. nodeStates.Select(idx => outData[(int)idx])];
+        }
         public static Dictionary<double,double[]> TotalStateMembers(DataGraph graph)
         {
             Dictionary<double, double[]> runningStateTotals = [];

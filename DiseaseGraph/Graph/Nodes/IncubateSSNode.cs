@@ -3,12 +3,10 @@ namespace DiseaseGraph.Graph
     public class IncubateSSNode : IncubateNode
     {
         public IncubateSSNode(){}
-        protected IncubateSSNode(double timeStep, double baseInfectChance, double infectionTime = 0, double incubationTime = 0)
-            : base(timeStep, baseInfectChance, infectionTime, incubationTime) { }
-        public override IncubateSSNode Create(params double[] args)
+        protected IncubateSSNode(NodeParams nodeParams) : base(nodeParams) { }
+        public override IncubateSSNode Create(NodeParams nodeParams)
         {
-            if (args.Length < 2) throw new ArgumentException($"{args.Length} values given, at least 2 values are required");
-            return new(args[0],args[1]);
+            return new(nodeParams);
         }
         public override double GetViralLoad(double infectionThreshold, double infectionCall, double baseViralLoad)
         {

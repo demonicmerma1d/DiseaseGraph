@@ -1,11 +1,17 @@
 using DiseaseGraph.Graph;
 using DiseaseGraph.Extensions;
 using ScottPlot;
-using System;
-using ScottPlot.AxisPanels;
-
+using MoreLinq;
 namespace DiseaseGraph.DataProcessing
 {
+    [Flags]
+    public enum PlotOptions
+    {
+        None = 0b_00,
+        Raw = 0b_01,
+        Smooth = 0b_10,
+        Both = Raw | Smooth
+    } 
     public static class DataPlots
     {
         private static string SavePath 
@@ -27,104 +33,103 @@ namespace DiseaseGraph.DataProcessing
                 NodeState.Dead => "Dead",
                 _ => "Unknown state"
             };
-        public static void PlotData(NodeState[] plotNodeStates, string saveName,string title = "",string xAxis = "",string yAxis = "",params Dictionary<double, double[]>[] AllData)
-        {
-            Plot plot = new();
-            double maxTime = 0;
-            foreach (var data in AllData)
-            {
-                AddToPlot(ref plot, plotNodeStates, data,ref maxTime);
-            }
-            SetAxes(ref plot,xAxis:xAxis,yAxis:yAxis);
-            plot.Axes.SetLimitsX(0, maxTime);
-            plot.Save(DataUtilities.ValidFileName(SavePath, saveName, ".png"), 800, 500);
-            plot.ShowLegend(Alignment.MiddleRight);
-        }
-        private static void AddToPlot(ref Plot plot,NodeState[] plotNodeStates, Dictionary<double, double[]> data, ref double maxTime)
-        {
-            var listData = data.OrderBy(x => x.Key).ToList();
-            var times = listData.Select(x => x.Key).ToList();
-            maxTime = Math.Max(times.Max(),maxTime);
-            foreach (var nodeState in plotNodeStates)
-            {
-                var popData = listData.Select(x => x.Value[(int)nodeState]).ToList();
-                var plt = plot.Add.ScatterLine(times, popData);
-                plt.LegendText = LegendName(nodeState);
-            }
-        }
-        public static void PlotDataArr(List<Dictionary<double, double[]>> AllData,NodeState[] plotNodeStates, string saveName,string title = "",string xAxis = "",string yAxis = "")
-        {
-            Plot plot = new();
-            double maxTime = 0;
-            foreach (var data in AllData)
-            {
-                AddToPlot(ref plot, plotNodeStates, data,ref maxTime);
-            }
-            SetAxes(ref plot,title,xAxis,yAxis);
-            plot.Axes.SetLimitsX(0, maxTime);
-            plot.Save(DataUtilities.ValidFileName(SavePath, saveName, ".png"), 800, 500);
-            plot.ShowLegend(Alignment.MiddleRight);
-        }
-        public static void PlotTotalsGraph(DataGraph graph,NodeState[] plotNodeStates,string title)
-        {
-            PlotData(plotNodeStates,graph.FileName("totals",true),title,"Time","Node Count",DataProcessor.TotalStateMembers(graph));
-        }
-        public static void PlotStateChangeGraph(DataGraph graph,NodeState[] plotNodeStates,string title, bool all)
-        {
-            PlotData(plotNodeStates, graph.FileName(all ? "net" : "new",true),
-            title,"Time","Node Count",DataProcessor.GraphStateChangesByTime(graph, all));
-        }
-        public static void MultiPlotStateChangeGraph(List<DataGraph> graphs,NodeState[] plotNodeStates,string title, bool all)
-        {
-            List<Dictionary<double, double[]>> allGraphData = [.. from graph in graphs select DataUtilities.SmoothData(DataProcessor.GraphStateChangesByTime(graph, all),0.2)];
-            PlotDataArr(allGraphData, plotNodeStates, graphs[0].FileName((all ? "net" : "new") + $"{graphs.Count}", true), title, "Time", "Node Count");
-        }
-        public static void DegreeDistributionGraph(DataGraph graph)
-        {
-            Dictionary<int, int> degDist = [];
-            foreach (var vertex in graph.NodeData)
-            {
-                int degree = graph.Graph.OutEdges(vertex).Count();
-                if (!degDist.ContainsKey(degree)) degDist.Add(degree,0);
-                degDist[degree] += 1;
-            }
-            var plot = new Plot();
-            plot.Add.Bars((Bar[])[.. from deg in degDist.Keys select new Bar(){Position = deg,Value = degDist[deg]}]);
-            SetAxes(ref plot, $"Node degree distribution for {graph.NodeData.Count} nodes", "Degree of Nodes", "Node Count by Degree");
-            plot.Save(DataUtilities.ValidFileName(SavePath, graph.FileName("DegDist"), ".png"), 800, 500);
-        }
-        private static void SetAxes(ref Plot plot,string title = "",string xAxis = "", string yAxis = "")
+        private static void SetAxes(this Plot plot,string title = "",string xAxis = "", string yAxis = "")
         {
             plot.Axes.Title.Label.Text = title;
             plot.Axes.Bottom.Label.Text = xAxis;
             plot.Axes.Left.Label.Text = yAxis;
         }
-        public static void PlotInfectionStatGraph(Dictionary<double,double[]> infectedProportions,Func<double[],double> aggregate,string title,string xVar,string yVar,string saveNameData,int size)
+        private static void Scatter(this Plot plot,List<double> xData,List<double?> yData,string legendLabel)
         {
-            var plot = new Plot();
-            
-            Dictionary<double,double> infectedDataProcessed = infectedProportions.ToDictionary(x => x.Key,x => aggregate(x.Value));
-            var plt = plot.Add.ScatterLine(infectedProportions.Select(x => x.Key).ToList(), [.. infectedProportions.Select(x => aggregate(x.Value))]);
-            plt.LegendText = "normal";
-            var smoothedData = DataUtilities.SmoothDataAverage(infectedDataProcessed,size).OrderBy(x => x.Key);
-            var smhplt = plot.Add.ScatterLine(smoothedData.Select(x => x.Key).ToList(), [.. smoothedData.Select(x => x.Value)]);
-            smhplt.LegendText = "smooth";
-            SetAxes(ref plot, title,xVar,yVar);
-            plot.ShowLegend();
-            plot.Save(DataUtilities.ValidFileName(SavePath,saveNameData+$"-{DateTime.Now:yyyyMMddHHmmss}", ".png"), 800, 500);
+            List<double> xDataFiltered = [.. Enumerable.Range(0, xData.Count).Where(i => yData[i] != null).Select(i => xData[i])];
+            List<double> yDataFiltered = [.. Enumerable.Range(0, yData.Count).Where(i => yData[i] != null).Select(i => (double)yData[i])];
+            if (xDataFiltered.Count != yDataFiltered.Count) throw new Exception("The length of xData and yData must match");
+            var plt = plot.Add.ScatterLine(xDataFiltered, yDataFiltered);
+            plt.LegendText = legendLabel;
         }
-        public static void PlotInfectionStatGraphTest(Dictionary<double,double[]> infectedProportions,Func<double[],double> aggregate,string title,string xVar,string yVar,string saveNameData,int size)
+        private static void Scatter(this Plot plot,List<double> xData,List<double?> yData)
         {
+            List<double> xDataFiltered = [.. Enumerable.Range(0, xData.Count).Where(i => yData[i] != null).Select(i => xData[i])];
+            List<double> yDataFiltered = [.. Enumerable.Range(0, yData.Count).Where(i => yData[i] != null).Select(i => (double)yData[i])];
+            if (xDataFiltered.Count != yDataFiltered.Count) throw new Exception("The length of xData and yData must match");
+            var plt = plot.Add.ScatterLine(xDataFiltered, yDataFiltered);
+        }
+        public static void Plot(string[] legendLabels,string saveName,string title,string xLabel,string yLabel,List<double> xData, List<List<double?>> yDataLists, bool showLegend = true)
+        {
+            if (yDataLists.Count == 0) throw new Exception("At least one set of yData must be provided");
+            if (showLegend && (yDataLists.Count != legendLabels.Length)) throw new Exception("The count of data and legend labels does not match");
+            Plot plot = new();
+            plot.SetAxes(title, xLabel, yLabel);
+            if (showLegend) for (int i = 0; i < yDataLists.Count; i++) plot.Scatter(xData, yDataLists[i], legendLabels[i]);
+            else for (int i = 0; i < yDataLists.Count; i++) plot.Scatter(xData, yDataLists[i]);
+            plot.Axes.SetLimitsX(xData.Min(),xData.Max());
+            if (showLegend) plot.ShowLegend(Alignment.MiddleRight);
+            plot.Save(DataUtilities.ValidFileName(SavePath, saveName, ".png"), 800, 500);
+        }
+        public static void PlotTotalsGraph(DataGraph graph,NodeState[] nodeStates,string title)
+        {
+            var yData = DataProcessor.TotalStateMembers(graph).SplitNodeStatesToLists(nodeStates,out List<double> xData);
+            Plot([.. nodeStates.Select(LegendName)], graph.FileName("totals",true), title,"Time","NodeCount",xData,[..yData]);
+        }
+        public static void PlotStateChangeGraph(DataGraph graph,NodeState[] nodeStates,string title, bool all,bool showLegend=true)
+        {
+            var yData = DataProcessor.GraphStateChangesByTime(graph,all).SplitNodeStatesToLists(nodeStates,out List<double> xData);
+            Plot([.. nodeStates.Select(LegendName)], graph.FileName(all ? "net" : "new",true), title,"Time","NodeCount",xData,[..yData],showLegend);
+        }
+        public static void MultiPlotChangesForState(List<DataGraph> graphList,string[] legendLabels,NodeState nodeState,string title, bool all,bool showLegend=true)
+        {
+            PlotAggregates(legendLabels, $"StateChangePlot-{(all ? "net" : "new")}", title, "Time", "NodeCount",
+             x => x[(int)nodeState], [.. from graph in graphList select DataProcessor.GraphStateChangesByTime(graph,all)],PlotOptions.Smooth,showLegend,10);
+        }
+        public static void MultiPlotTotalsForState(List<DataGraph> graphList,string[] legendLabels,NodeState nodeState,string title,bool showLegend=true)
+        {
+            PlotAggregates(legendLabels, $"StateChangePlot-Totals", title, "Time", "NodeCount",
+             x => x[(int)nodeState], [.. from graph in graphList select DataProcessor.TotalStateMembers(graph)],PlotOptions.Raw,showLegend);
+        }
+        public static void PlotAggregates(string[] legendLabels,string saveName,string title,string xLabel,string yLabel,Func<double[],double> aggregate,List<Dictionary<double,double[]>> data,PlotOptions plotOptions,bool showLegend = true,int size = 0)
+        {
+            if (plotOptions == PlotOptions.None) return;
+            List<Dictionary<double, double>> aggData = [];
+            if ((plotOptions & PlotOptions.Raw) != 0) //if including raw plots
+            {
+                aggData.AddRange(data.Select(dataDict => dataDict.ToDictionary(x => x.Key,x => aggregate(x.Value))));
+            }
+            if ((plotOptions & PlotOptions.Smooth) != 0) //if including smoothed plots
+            {
+                aggData.AddRange(data.Select(dataDict => DataUtilities.SmoothDataAverage(dataDict.ToDictionary(x => x.Key,x => aggregate(x.Value)),size)));
+            }
+            IEnumerable<double> allKeys = data.Select(x=> x.Keys).Aggregate(new HashSet<double>(),(current,next) => [.. current.Union(next)]); //get all the xvals
+            Dictionary<double, double?[]> processedData = [];
+            foreach (var key in allKeys) //calc and format all the yvals for each element in the list into processedData
+            {
+                double?[] val = [.. from dict in aggData select dict.TryGetValue(key, out double dictVal) ? (double?)dictVal : null];
+                processedData[key] = val;
+            }
+            List<double> orderedKeys = [.. allKeys.OrderBy(x => x)];
+            List<List<double?>> orderedDataLists = [.. Enumerable.Range(0,aggData.Count).Select(i => orderedKeys.Select(key => processedData[key][i]).ToList())];
+            Plot((plotOptions == PlotOptions.Both) ? [.. Enumerable.Concat(legendLabels, [.. from label in legendLabels select $"{label}-Smooth"])] : legendLabels, saveName, title, xLabel, yLabel, orderedKeys, orderedDataLists,showLegend);
+        }
+        public static void PlotInfectionStatGraph(Dictionary<double,double[]> infectedProportions,Func<double[],double> aggregate,string title,string xVar,string yVar,string saveNameData,int size=10)
+        {
+            PlotAggregates(["Total Infected"], saveNameData, title, xVar, yVar, aggregate, [infectedProportions], PlotOptions.Both, size:size);
+        }
+        public static void MultiPlotInfectionStatGraph(List<Dictionary<double, double[]>> infectedProportionsList, Func<double[], double> aggregate, string title, string xVar, string yVar, string saveNameData, string[] legendLabels,int size=10)
+        {
+            PlotAggregates(legendLabels, saveNameData, title, xVar, yVar, aggregate, infectedProportionsList, PlotOptions.Both, size:size);
+        }
+        public static void DegreeDistributionGraph(DataGraph graph) //non scatter plot, needs to be done manually
+        {
+            Dictionary<int, int> degDist = [];
+            foreach (var vertex in graph.NodeData)
+            {
+                int degree = graph.Graph.OutEdges(vertex).Count();
+                degDist.TryAdd(degree, 0);
+                degDist[degree] += 1;
+            }
             var plot = new Plot();
-            Dictionary<double,double> infectedDataProcessed = infectedProportions.ToDictionary(x => x.Key,x => aggregate(x.Value));
-            var plt = plot.Add.ScatterLine(infectedProportions.Select(x => x.Key).ToList(), [.. infectedDataProcessed.OrderBy(x => x.Key).Select(x => x.Value)]);
-            plt.LegendText = "normal";
-            var smoothedData = DataUtilities.SmoothDataAverage(infectedDataProcessed,size).OrderBy(x => x.Key);
-            var smhplt = plot.Add.ScatterLine(smoothedData.Select(x => x.Key).ToList(), [.. smoothedData.Select(x => x.Value)]);
-            smhplt.LegendText = "smooth";
-            SetAxes(ref plot, title,xVar,yVar);
-            plot.ShowLegend();
-            plot.Save(DataUtilities.ValidFileName(SavePath,saveNameData+$"-{DateTime.Now:yyyyMMddHHmmss}", ".png"), 800, 500);
+            plot.Add.Bars((Bar[])[.. from deg in degDist.Keys select new Bar(){Position = deg,Value = degDist[deg]}]);
+            plot.SetAxes($"Node degree distribution for {graph.NodeData.Count} nodes", "Degree of Nodes", "Node Count by Degree");
+            plot.Save(DataUtilities.ValidFileName(SavePath, graph.FileName("DegDist"), ".png"), 800, 500);
         }
     }
 }

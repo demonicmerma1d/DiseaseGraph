@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using FastDeepCloner;
 using Microsoft.VisualBasic;
 namespace DiseaseGraph.Graph
@@ -16,41 +17,63 @@ namespace DiseaseGraph.Graph
         public readonly NodeState NodeState = node.NodeState;
         public readonly bool IsAlive = node.IsAlive;
     }
+    public struct NodeParams(double timeStep,double baseInfectChance)//simplifies base graph code for adding simulation parameters
+    {
+        public double BaseInfectChance = baseInfectChance;
+        public double TimeStep = timeStep;
+        public double IsolateChance = 0;
+        public bool HasReinfectionTimer = false;
+        public double DeathChance = 1;
+    }
     public class Node //generic infection node type
     {
-        public double InfectionTime;
+        protected double InfectionTime;
         protected double TimeStep;
         public bool ChangeState;
         public double ViralLoad;
         public double BaseInfectChance;
         public bool MarkedAsInfected;
+        public double ReinfectionTime;
+        public bool HasReinfectionTimer;
+        public double IsolateChance;
+        public double DeathChance;
+        public double TimeUntilIsolation;
+        public bool WillIsolate;
+        public bool IsIsolating;
         protected double Delay; //delay for symptoms showing, usable for case of symptoms = infectious(an incubation period)
         public NodeState NodeState {get; protected set;}
         public NodeState OldNodeState { get;  protected set;}
         public bool IsAlive { get { return AliveCheck(); } }
+        protected bool WillDieOnInfection;
         public Node(){}
-        protected Node(double timeStep,double baseInfectChance, double infectionTime = 0,double incubationTime = 0)
+        protected Node(NodeParams nodeParams)
         {
-            InfectionTime = infectionTime;
-            TimeStep = timeStep;
+            TimeStep = nodeParams.TimeStep;
+            InfectionTime = 0;
             ViralLoad = 0;
             OldNodeState = NodeState.Susceptible;
             NodeState = NodeState.Susceptible;
             ChangeState = false;
-            BaseInfectChance = baseInfectChance; 
+            BaseInfectChance = nodeParams.BaseInfectChance;
             MarkedAsInfected = false;
-            Delay = incubationTime;
+            Delay = 0;
+            ReinfectionTime = 0;
+            TimeUntilIsolation = 0;
+            HasReinfectionTimer = nodeParams.HasReinfectionTimer;
+            IsolateChance = nodeParams.IsolateChance;
+            WillIsolate = false;
+            IsIsolating = false;
+            WillDieOnInfection = true; //hardcoded default behaviour, more complicated cases handled reusing the viral load upon infection as a pseudorandom
         }
         public override string ToString()
         {
             return $"{OldNodeState} : {NodeState} : {IsAlive}";
         }
-        public virtual Node Create(params double[] args) //timestep,infection chance,death chance as 3rd?
+        public virtual Node Create(NodeParams nodeParams)
         {
-            if (args.Length < 2) throw new ArgumentException($"{args.Length} values given,at least 2 are required");
-            return new(args[0],args[1]);
+            return new(nodeParams);
         }
-        protected bool AliveCheck() => NodeState != NodeState.Removed; //for non reinfectible purposes, functionally Removed = dead
+        protected bool AliveCheck() => !WillDieOnInfection || NodeState != NodeState.Removed;
         protected virtual void AdvanceState()
         {
             ChangeState = true;
@@ -63,7 +86,9 @@ namespace DiseaseGraph.Graph
                 case NodeState.Infectious:
                     NodeState = NodeState.Removed;
                     break;
-                default:
+                case NodeState.Removed:
+                    if (WillDieOnInfection) break;
+                    if (HasReinfectionTimer) NodeState = NodeState.Susceptible;
                     break;
             }
         }
@@ -78,21 +103,23 @@ namespace DiseaseGraph.Graph
         }
         public virtual NodeState Update()
         {
-            if (NodeState == NodeState.Removed || InfectionTime == 0) return NodeState;
+            if (NodeState == NodeState.Removed) return NodeState;
             InfectionTime-=TimeStep;
-            if (InfectionTime <= 0)
+            if (InfectionTime <= 0 && NodeState == NodeState.Infectious)
             {
                 InfectionTime = 0;
                 AdvanceState();
             }
             return NodeState;
         }
-        public virtual void Infect(double infectionTime, double incubationTime, double viralLoad)
+        public virtual void Infect(RunParams runParams, double viralLoad)
         {
+            if (NodeState != NodeState.Susceptible) throw new Exception($"Only Susceptible nodes can be infected, this node is {NodeState}");
             AdvanceState();
-            InfectionTime = infectionTime;
-            Delay = incubationTime;
+            InfectionTime = runParams.InfectionTime;
+            Delay = runParams.Delay;
             ViralLoad = viralLoad;
+            ReinfectionTime = runParams.ReinfectionTime;
         }
         public void UpdateTimeStep(double newTimeStep)
         {
