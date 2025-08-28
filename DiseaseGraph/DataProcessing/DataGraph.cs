@@ -9,7 +9,7 @@ namespace DiseaseGraph.DataProcessing
         public readonly Dictionary<double,HashSet<NodeTimeEntry>> StateChanges = stateChanges;
         public readonly AdjacencyGraph<int,Edge<int>> Graph = graph.Clone();
         public readonly HashSet<int> NodeData = nodeData;
-        private readonly string BaseFileName = baseFileName;
+        public readonly string BaseFileName = baseFileName;
         public string FileName(string callFuncId = "",bool dateTime = false)
         {
             string name = callFuncId + BaseFileName;

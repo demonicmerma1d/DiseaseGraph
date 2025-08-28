@@ -14,7 +14,7 @@ namespace DiseaseGraph.DataProcessing
     } 
     public static class DataPlots
     {
-        private static string SavePath 
+        public static string SavePath 
         {
             get
             {
@@ -130,6 +130,17 @@ namespace DiseaseGraph.DataProcessing
             plot.Add.Bars((Bar[])[.. from deg in degDist.Keys select new Bar(){Position = deg,Value = degDist[deg]}]);
             plot.SetAxes($"Node degree distribution for {graph.NodeData.Count} nodes", "Degree of Nodes", "Node Count by Degree");
             plot.Save(DataUtilities.ValidFileName(SavePath, graph.FileName("DegDist"), ".png"), 800, 500);
+        }
+        public static void PlotHist(double[] data,int barCount, string xLabel,string yLabel,string title, string saveName)
+        {
+            var hist = ScottPlot.Statistics.Histogram.WithBinCount(barCount, data);
+            var plot = new Plot();
+            var barPlot = plot.Add.Bars(hist.Bins, hist.Counts);
+            foreach (var bar in barPlot.Bars) bar.Size = hist.FirstBinSize * 0.8; 
+            
+            plot.SetAxes(title,xLabel,yLabel);
+            plot.Axes.Margins(bottom: 0);
+            plot.Save(DataUtilities.ValidFileName(SavePath,saveName,".png"),800, 500);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace DiseaseGraph.Extensions
 {
     public static class Extensions
     {
-        public static T ChooseFrom<T>(this Random random, IEnumerable<T> options)
+        public static T ChooseFrom<T>(this Random random, IEnumerable<T> options) //helper function taken from the stardew valley source code
         {
             if (options == null || !options.Any())
             {

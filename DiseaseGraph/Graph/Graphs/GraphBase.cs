@@ -48,11 +48,13 @@ namespace DiseaseGraph.Graph
         public AdjacencyGraph<int,Edge<int>> _graph;
         public Dictionary<int,TNode> NodeData;
         public double TimeStep { get; protected set; }
-        private HashSet<int> TrackedNodes;
-        private HashSet<int> InfectedNodes;
+        public HashSet<int> TrackedNodes;
+        public HashSet<int> InfectedNodes;
         public Random Random;
         protected double BaseViralLoad;
-        protected GraphBase(double timeStep,double baseViralLoad, int? seed = null) //yes stuff is left unassigned, its fine
+        public double EdgeDensity { get { return _graph.EdgeCount/(double)(_graph.VertexCount*_graph.VertexCount-1); }}
+        public double AverageDegree { get { return AveNodeDegree();}}
+        protected GraphBase(double timeStep,double baseViralLoad, int? seed = null)
         {
             TimeStep = timeStep;
             TrackedNodes = [];
@@ -60,6 +62,8 @@ namespace DiseaseGraph.Graph
             Random = seed != null ? new((int)seed) : new();
             StateChanges = [];
             BaseViralLoad = baseViralLoad;
+            NodeData = [];
+            _graph = new();
         }
         protected virtual void MakeGraph(List<int> vertexList,List<Edge<int>> edgeList,List<double> baseInfectionChances)
         {
@@ -121,24 +125,34 @@ namespace DiseaseGraph.Graph
             foreach (int nodeId in newInfectionChances) TryInfectNode(nodeId, runParams);
             return InfectedNodes.Count != 0;
         }
-        public double Run(double maxTime,List<int> seedInfections,RunParams runParams)
+        public double Run(double maxTime,List<int> seedInfections,RunParams runParams, out double simInternalTime)
         {
             ResetNodes();
+            simInternalTime = 0;
             Stopwatch stopwatch = Stopwatch.StartNew();
             foreach (var nodeId in seedInfections)
             {
-                InfectNode(nodeId, runParams);
+                InfectNode(nodeId, runParams,1,Random.NextDouble());
                 ReportNodeChange(0, nodeId);
             }
             for (double currentTime = 0; currentTime < maxTime; currentTime += TimeStep)
             {
+                simInternalTime = currentTime;
                 if (!UpdateInfection(currentTime, runParams)) break;
             }
             return stopwatch.Elapsed.TotalSeconds;
         }
+        public double RunRandom(double maxTime,RunParams runParams, out double simInternalTime)
+        {
+            return Run(maxTime,[Random.Next(NodeData.Count)],runParams,out simInternalTime);
+        }
         public double RunRandom(double maxTime,RunParams runParams)
         {
             return Run(maxTime,[Random.Next(NodeData.Count)],runParams);
+        }
+        public double Run(double maxTime,List<int> seedInfections,RunParams runParams)
+        {
+            return Run(maxTime, seedInfections, runParams, out _);
         }
         private void ResetNodes() //makes graph reusable
         {
@@ -222,14 +236,6 @@ namespace DiseaseGraph.Graph
             }
             return edgeList;
         }
-        public GraphBase<TNode> Copy()
-        {
-            var clone = this.Clone();
-            clone.TrackedNodes.Clear();
-            clone.InfectedNodes.Clear();
-            clone.StateChanges.Clear();
-            return clone;
-        }
         public void SaveEdgeListToFile()
         {
             string baseName = FileName($"edges");
@@ -289,11 +295,19 @@ namespace DiseaseGraph.Graph
         {
             ReplaceInfectionChances([.. Enumerable.Repeat(newChance, NodeData.Count)]);
         }
+        public void UpdateIsolationChances(double newIsolationChance)
+        {
+            foreach(TNode node in NodeData.Values) node.IsolateChance = newIsolationChance;
+        }
         public void UpdateTimestep(double newTimestep)
         {
             ArgumentOutOfRangeException.ThrowIfNegative(newTimestep, $"{newTimestep} must be greater or equal to zero");
             foreach (var node in NodeData.Values) node.UpdateTimeStep(newTimestep);
             TimeStep = newTimestep;
+        }
+        protected double AveNodeDegree()
+        {
+            return _graph.Vertices.Select(x => _graph.OutDegree(x)).Average();
         }
     }
 }
